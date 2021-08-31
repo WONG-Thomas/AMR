@@ -17,10 +17,11 @@ import numpy as np
 
 def read_process(img_path, img_name):
     ori_img = cv2.imread(img_path,0)
-    cv2.imwrite('./'+img_name+'ori.bmp', ori_img)
+    cv2.imwrite('../result/'+img_name+'ori.bmp', ori_img)
     img = ori_img.copy()
     img = cv2.equalizeHist(img)
-    cv2.imwrite('./'+img_name+'grey.bmp', img)
+    img = cv2.GaussianBlur(img, (5, 5), 0)
+    cv2.imwrite('../result/'+img_name+'grey.bmp', img)
 
     return ori_img, img
 
@@ -30,7 +31,7 @@ def detect_circle(img, img_name, ori_img):
     for i in circles[0,:]:
         cv2.circle(img,(i[0],i[1]),i[2],(255,0,0),2)
         cv2.circle(img,(i[0],i[1]),2,(255,0,0),2)
-    cv2.imwrite('./'+img_name+'circle.bmp', img)
+    cv2.imwrite('../result/'+img_name+'circle.bmp', img)
     if len(circles[0]) == 0:
         print('no circle detect')
         exit(1)
@@ -40,9 +41,9 @@ def detect_circle(img, img_name, ori_img):
     cv2.circle(roi, (x,y), r, (1,0,0), -1)
     img = ori_img * (roi.astype(img.dtype))
     img = img[max(int(y)-r, 0):min(int(y)+r, img.shape[0]), max(int(x)-r, 0):min(int(x)+r, img.shape[1])]
-    cv2.imwrite('./'+img_name+'crop.bmp', img)
+    cv2.imwrite('../result/'+img_name+'crop.bmp', img)
     img = cv2.resize(img, (501,501),cv2.INTER_AREA)
-    cv2.imwrite('./'+img_name+'.resize.bmp', img)
+    cv2.imwrite('../result/'+img_name+'.resize.bmp', img)
 
     return img
 
@@ -52,7 +53,7 @@ def detect_circle(img, img_name, ori_img):
     for i in circles[0,:]:
         cv2.circle(img,(i[0],i[1]),i[2],(255,0,0),2)
         cv2.circle(img,(i[0],i[1]),2,(255,0,0),2)
-    cv2.imwrite('./'+img_name+'circle.bmp', img)
+    cv2.imwrite('../result/'+img_name+'circle.bmp', img)
     if len(circles[0]) == 0:
         print('no circle detect')
         exit(1)
@@ -62,23 +63,23 @@ def detect_circle(img, img_name, ori_img):
     cv2.circle(roi, (x,y), r, (1,0,0), -1)
     img = ori_img * (roi.astype(img.dtype))
     img = img[max(int(y)-r, 0):min(int(y)+r, img.shape[0]), max(int(x)-r, 0):min(int(x)+r, img.shape[1])]
-    cv2.imwrite('./'+img_name+'crop.bmp', img)
+    cv2.imwrite('../result/'+img_name+'crop.bmp', img)
     img = cv2.resize(img, (501,501),cv2.INTER_AREA)
-    cv2.imwrite('./'+img_name+'.resize.bmp', img)
+    cv2.imwrite('../result/'+img_name+'.resize.bmp', img)
 
     return img
 
 def detect_line(img_path, img_name):
     img = cv2.imread(img_path,0)
     print (img.shape)
-    cv2.imwrite('./grey.bmp', img)
+    cv2.imwrite('../result/grey.bmp', img)
     img = cv2.GaussianBlur(img,(5,5),3)
     #img = cv2.medianBlur(img, 3)
-    cv2.imwrite('./blur.bmp', img)
+    cv2.imwrite('../result/blur.bmp', img)
     _, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
-    cv2.imwrite('./'+img_name+'binary.bmp', img)
+    cv2.imwrite('../result/'+img_name+'binary.bmp', img)
     img = cv2.Canny(img, 50, 150, apertureSize=3)
-    cv2.imwrite('./border.bmp', img)
+    cv2.imwrite('../result/border.bmp', img)
     #img = cv2.Canny(img, 50, 150, apertureSize=3)
     minLineLength = 50
     maxLineGap = 4
@@ -90,7 +91,7 @@ def detect_line(img_path, img_name):
         for line in lines:
             x1,y1,x2,y2=line[0]
             cv2.line(img,(x1,y1),(x2,y2),(0,0,255),2)
-    cv2.imwrite('./'+img_name+'line.bmp', img)
+    cv2.imwrite('../result/'+img_name+'line.bmp', img)
 
 def find_small_big(start, arr, result):
     small,big = min(arr),max(arr)
@@ -228,7 +229,7 @@ def detect_dark_circle(img, img_name):
                     img[i][j] = 0
                 else:
                     img[i][j] = 255 
-    cv2.imwrite('./'+img_name+'dark_ring.bmp', img)
+    cv2.imwrite('../result/'+img_name+'dark_ring.bmp', img)
 
 def detect_dark_circle2(img, img_name):
     w,h = img.shape
@@ -262,7 +263,43 @@ def detect_dark_circle2(img, img_name):
                     img[i][j] = 0
                 else:
                     img[i][j] = 255 
-    cv2.imwrite('./'+img_name+'dark_ring2.bmp', img)
+    cv2.imwrite('../result/'+img_name+'dark_ring2.bmp', img)
+
+    return max_d, img
+
+def detect_dark_circle_by_center(img, x, y, img_name):
+    w,h = img.shape
+    r = min(x,y,abs(h-x),abs(w-y)) 
+    print (x,y,r,w,h)
+    statics = np.zeros((int(x)*2,4))
+    for i in range(w):
+        for j in range(h):
+            d = int(((i-y)**2+(j-x)**2)**0.5)
+            statics[d][0] += 1
+            if img[i][j] == 0:
+                statics[d][1] += 1
+    statics = statics[:r,]
+    statics[:,0][statics[:,0]==0] = -1 
+    statics[:,2] = statics[:,1]/statics[:,0]
+    print (statics[:,2])
+
+    width = 10
+    for i,s in enumerate(statics):
+        if i-width/2 < 0 or i+width/2 >= len(statics):
+            continue
+        s[3] = sum (statics[i-int(width/2):i+int(width/2),2])/width
+    max_d = np.argmax(statics[:, 3])
+    print (max_d, statics[:,3])
+
+    for i in range(w):
+        for j in range(h):
+            if max_d == int(((i-y)**2+(j-x)**2)**0.5):
+                if img[i][j] >= 250:
+                    img[i][j] = 0
+                else:
+                    img[i][j] = 255 
+    cv2.circle(img,(x,y),3,(0,0,0),-1)
+    cv2.imwrite('../result/'+img_name+'.circle.bmp', img)
 
     return max_d, img
 
@@ -348,7 +385,7 @@ def find_angle(img, max_d, img_name):
                     img[i][j] = 255 
 
     cv2.circle(img,(x,y),3,(0,0,0),-1)
-    cv2.imwrite('./'+img_name+'light_direction.bmp', img)
+    cv2.imwrite('../result/'+img_name+'light_direction.bmp', img)
     return found_a
 
 def draw_result(img, found_a, max_d, img_name):
@@ -366,7 +403,24 @@ def draw_result(img, found_a, max_d, img_name):
                 else:
                     img[i][j] = 255 
     cv2.circle(img,(x,y),3,(0,0,0),-1)
-    cv2.imwrite('./'+img_name+'.result.bmp', img)
+    cv2.imwrite('../result/'+img_name+'.result.bmp', img)
+
+def draw_result_by_center(img, y, x, found_a, max_d, img_name):
+    w,h = img.shape
+    #x,y = int(w/2),int(h/2)
+    for i in range(w):
+        for j in range(h):
+            d = int(((i-x)**2+(j-y)**2)**0.5)
+            if d >= max_d:
+                continue
+            angle = cal_angle(x,y,i,j)
+            if angle == found_a:
+                if img[i][j] >= 127:
+                    img[i][j] = 0
+                else:
+                    img[i][j] = 255 
+    cv2.circle(img,(y,x),3,(0,0,0),-1)
+    cv2.imwrite('../result/'+img_name+'.result.bmp', img)
 
 def detect_direction(img, img_name):
     ori_img = img.copy()
@@ -395,22 +449,217 @@ def detect(dir_path):
             if i == 50:
                 exit(1)
 
-def deal_with_bg(dir_path):
+def preprocess(img, im_name):
+    #w,h = img.shape
+    #if w > h:
+    #    img = img[w-h:,:]
+    #else:
+    #    img = img[:,h-w:]
+    #img = cv2.resize(img, (512,512),cv2.INTER_CUBIC)
+    img = cv2.equalizeHist(img)
+    #img = cv2.medianBlur(img, 5)
+    img = cv2.GaussianBlur(img, (5, 5), 10)
+    im_path = '../result/'+im_name+'.resized.bmp'
+    cv2.imwrite(im_path, img)
+
+    return img
+
+def find_angle_by_center(img, y, x, max_d, img_name):
+    w,h = img.shape
+    #x,y = int(w/2),int(h/2)
+    print (x,y, max_d)
+    statics = np.zeros((360,4))
+    for i in range(w):
+        for j in range(h):
+            d = int(((i-x)**2+(j-y)**2)**0.5)
+            if d >= max_d:
+                continue
+            angle = cal_angle(x,y,i,j)
+
+            if angle <0 or angle >= 360:
+                print (angle, dy, dx, i, j)
+                exit(1)
+
+            statics[angle][0] += 1
+            if img[i][j] == 0:
+                statics[angle][1] += 1
+
+    statics[:,2] = statics[:,1]/statics[:,0]
+    found_a = np.argmin(statics[:, 2])
+    #print ('angle ', statics[:,2])
+    #print ('found angle ', found_a)
+
+    width = 10
+    for i,s in enumerate(statics):
+        if i-int(width/2) < 0:
+            s[3] = sum (statics[i-int(width/2):,2])
+            print (i, i-width/2, s[3])
+            s[3] += sum (statics[:i+int(width/2),2])
+            print (i, i+width/2, s[3])
+            s[3] /= width
+        elif i+int(width/2) >= len(statics):
+            s[3] = sum (statics[i-int(width/2):,2])
+            s[3] += sum (statics[:i+int(width/2)-len(statics),2])
+            s[3] /= width
+        else:
+            s[3] = sum (statics[i-int(width/2):i+int(width/2),2])
+            s[3] /= width
+    found_a = np.argmin(statics[:, 3])
+    i_start = -1
+    i_length = 0
+    max_start = -1
+    max_length = 0
+    for i,s in enumerate(statics[:,3]):
+        if s == statics[:,3][found_a]:
+            if i_start == -1:
+                i_start = i
+            i_length += 1
+        else:
+            if i_length > max_length:
+                max_length  = i_length
+                max_start = i_start
+                i_start = -1
+                i_length = 0
+
+    max_a = max_start + round(max_length/2)
+    print ('average ', statics[:,3])
+    print ('adjust ', found_a, max_a, max_start, max_length )
+    found_a = max_a
+
+    for i in range(w):
+        for j in range(h):
+            d = int(((i-x)**2+(j-y)**2)**0.5)
+            if d >= max_d:
+                continue
+            angle = cal_angle(x,y,i,j)
+            if angle == found_a:
+                    img[i][j] = 128 
+
+    cv2.circle(img,(y,x),3,(0,0,0),-1)
+    cv2.circle(img,(y,x),max_d,(128,128,128),1)
+    cv2.imwrite('../result/'+img_name+'light_direction.bmp', img)
+    return found_a
+
+def deal_with_bg(dir_path, dict_center):
     for im_name in os.listdir(dir_path):
         if im_name.endswith('.jpg'):
             arr = im_name.split('_')
             if arr[-1][:-4] != '00000':
                 continue
             else:
-                print (arr[-1][:-4])
                 print ('ok')
-            print(im_name)
-            im_path = os.path.join(dir_path, im_name)
-            ori_img,img = read_process(im_path, im_name)
-            sub_img = detect_circle(img, im_name, ori_img)
+            #print(im_name)
+            img = cv2.imread(dir_path+im_name,0)
+            img = preprocess(img, im_name)
+            im_path = dir_path+im_name
+            result = os.popen('../shape_based_matching/shape_based_matching_test '+im_path).readlines()
+            #print (result)
+            result = result[-1].split(',')
+            x = eval(result[0])
+            y = eval(result[1])
+            #print (x,y)
+            img = cv2.imread(im_path,0)
+            cv2.circle(img,(x,y),2,(0,0,255),-1)
+            cv2.imwrite(im_path+'.template.bmp', img)
+            _, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
+            cv2.imwrite('../result/'+im_name+'.binary.bmp', img)
+            max_d, img = detect_dark_circle_by_center(img, x, y, im_name)
+
+            key = dir_path+arr[0]
+            dict_center[key] = (x,y,max_d)
+
+def deal_with_fg(dir_path, dict_center):
+    i_total = 0
+    i_right = 0
+    dict_result = {}
+    for im_name in os.listdir(dir_path):
+    #    if im_name !=  '07_00664.jpg':
+    #        continue
+        if im_name.endswith('.jpg'):
+            arr = im_name.split('_')
+            if arr[-1][:-4] == '00000':
+                continue
+            else:
+                print(im_name)
+                img = cv2.imread(dir_path+im_name,0)
+                ori_img = img.copy()
+                img = preprocess(img, im_name)
+                _, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
+                key = dir_path+arr[0]
+                x,y,max_d = dict_center[key]
+                angle = find_angle_by_center(img, x, y, max_d, im_name)
+                draw_result_by_center(ori_img, x, y, angle, max_d, im_name)
+                if arr[0] in dict_result:
+                    dict_result[arr[0]].append([im_name, angle])
+                else:
+                    dict_result[arr[0]] = [[im_name, angle]]
+            if arr[0] == '00':
+                i_total += 1
+                if angle != 110:
+                    print (im_name, "should be 110, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '01':
+                i_total += 1
+                if angle != 110:
+                    print (im_name, "should be 110, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '02':
+                i_total += 1
+                if angle != 130:
+                    print (im_name, "should be 130, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '03':
+                i_total += 1
+                if angle != 140:
+                    print (im_name, "should be 140, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '04':
+                i_total += 1
+                if angle != 110:
+                    print (im_name, "should be 110, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '05':
+                i_total += 1
+                if angle != 110:
+                    print (im_name, "should be 110, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '06':
+                i_total += 1
+                if angle != 110:
+                    print (im_name, "should be 110, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '07':
+                i_total += 1
+                if angle != 65:
+                    print (im_name, "should be 65, but it is ", angle)
+                else:
+                    i_right += 1
+            elif arr[0] == '08':
+                i_total += 1
+                if angle != 80:
+                    print (im_name, "should be 80, but it is ", angle)
+                else:
+                    i_right += 1
+            else:
+                print ("error there is not such imgae considered:", im_name)
+        print (dict_result)
+        for key in sorted(dict_result):
+            print (dict_result[key])
+        #print ("test result: ", i_right/i_total)
 
 def main():
-    deal_with_bg('../AMR_data/01/')
+    dict_center = {}
+    dir_path = '../../AMR_data/01/'
+    deal_with_bg(dir_path, dict_center)
+    print (dict_center)
+    deal_with_fg(dir_path, dict_center)
     #detect('../dial_meter/')
     #detect('../AMR_data/01/')
 
