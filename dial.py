@@ -420,6 +420,7 @@ def draw_result_by_center(img, y, x, found_a, max_d, img_name):
                 else:
                     img[i][j] = 255 
     cv2.circle(img,(y,x),3,(0,0,0),-1)
+    cv2.circle(img,(y,x),max_d,(0,0,0),1)
     cv2.imwrite('../result/'+img_name+'.result.bmp', img)
 
 def detect_direction(img, img_name):
@@ -449,20 +450,6 @@ def detect(dir_path):
             if i == 50:
                 exit(1)
 
-def preprocess(img, im_name):
-    #w,h = img.shape
-    #if w > h:
-    #    img = img[w-h:,:]
-    #else:
-    #    img = img[:,h-w:]
-    #img = cv2.resize(img, (512,512),cv2.INTER_CUBIC)
-    img = cv2.equalizeHist(img)
-    #img = cv2.medianBlur(img, 5)
-    img = cv2.GaussianBlur(img, (5, 5), 10)
-    im_path = '../result/'+im_name+'.resized.bmp'
-    cv2.imwrite(im_path, img)
-
-    return img
 
 def find_angle_by_center(img, y, x, max_d, img_name):
     w,h = img.shape
@@ -540,123 +527,170 @@ def find_angle_by_center(img, y, x, max_d, img_name):
     cv2.imwrite('../result/'+img_name+'light_direction.bmp', img)
     return found_a
 
+def preprocess(img, im_name):
+    #w,h = img.shape
+    #if w > h:
+    #    img = img[w-h:,:]
+    #else:
+    #    img = img[:,h-w:]
+    #img = cv2.resize(img, (512,512),cv2.INTER_CUBIC)
+    img = cv2.equalizeHist(img)
+    #img = cv2.medianBlur(img, 5)
+    img = cv2.GaussianBlur(img, (5, 5), 10)
+    im_path = '../result/'+im_name+'.resized.bmp'
+    cv2.imwrite(im_path, img)
+
+    return img
+
+def find_center(im_path, im_name):
+    #img = cv2.imread(im_path,0)
+    #img = preprocess(img, im_name)
+    #im_path = '../result/'+im_name+'.resized.bmp'
+    result = os.popen('../shape_based_matching/shape_based_matching_test '+im_path).readlines()
+    print (result)
+    result = result[-1].split(',')
+    x = eval(result[0])
+    y = eval(result[1])
+    r = eval(result[2])
+
+    return x,y,r
+
+def find_max_d_by_center(im_path, im_name, x, y):
+    img = cv2.imread(im_path,0)
+    _, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
+    cv2.imwrite('../result/'+im_name+'.binary.bmp', img)
+    max_d, img = detect_dark_circle_by_center(img, x, y, im_name)
+    return max_d
+
 def deal_with_bg(dir_path, dict_center):
     for im_name in os.listdir(dir_path):
         if im_name.endswith('.jpg'):
             arr = im_name.split('_')
             if arr[-1][:-4] != '00000':
+            #if im_name != '08_00884.jpg':
                 continue
             else:
                 print ('ok')
-            #print(im_name)
-            img = cv2.imread(dir_path+im_name,0)
-            img = preprocess(img, im_name)
             im_path = dir_path+im_name
-            result = os.popen('../shape_based_matching/shape_based_matching_test '+im_path).readlines()
-            #print (result)
-            result = result[-1].split(',')
-            x = eval(result[0])
-            y = eval(result[1])
-            #print (x,y)
+            x,y,r = find_center(im_path, im_name)
             img = cv2.imread(im_path,0)
-            cv2.circle(img,(x,y),2,(0,0,255),-1)
-            cv2.imwrite(im_path+'.template.bmp', img)
-            _, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
-            cv2.imwrite('../result/'+im_name+'.binary.bmp', img)
-            max_d, img = detect_dark_circle_by_center(img, x, y, im_name)
+            cv2.circle(img,(x,y),2,(0,0,0),-1)
+            cv2.circle(img,(x,y),r,(0,0,0),2)
+            cv2.imwrite('../result/'+im_name+'.bgcenter.bmp', img)
+            max_d = find_max_d_by_center(im_path, im_name, x, y)
 
             key = dir_path+arr[0]
             dict_center[key] = (x,y,max_d)
 
-def deal_with_fg(dir_path, dict_center):
+def deal_with_label(name, value):
     i_total = 0
     i_right = 0
+    if name == '00':
+        i_total += 1
+        if value != 110:
+            print (name, "should be 110, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '01':
+        i_total += 1
+        if value != 110:
+            print (name, "should be 110, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '02':
+        i_total += 1
+        if value != 130:
+            print (name, "should be 130, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '03':
+        i_total += 1
+        if value != 140:
+            print (name, "should be 140, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '04':
+        i_total += 1
+        if value != 110:
+            print (name, "should be 110, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '05':
+        i_total += 1
+        if value != 110:
+            print (name, "should be 110, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '06':
+        i_total += 1
+        if value != 110:
+            print (name, "should be 110, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '07':
+        i_total += 1
+        if value != 65:
+            print (name, "should be 65, but it is ", value)
+        else:
+            i_right += 1
+    elif name == '08':
+        i_total += 1
+        if value != 80:
+            print (name, "should be 80, but it is ", value)
+        else:
+            i_right += 1
+    else:
+        print ("error there is not such imgae considered:", name)
+
+def deal_with_fg(dir_path, dict_center):
     dict_result = {}
     for im_name in os.listdir(dir_path):
     #    if im_name !=  '07_00664.jpg':
     #        continue
         if im_name.endswith('.jpg'):
             arr = im_name.split('_')
+            position = arr[0]
             if arr[-1][:-4] == '00000':
                 continue
             else:
                 print(im_name)
                 img = cv2.imread(dir_path+im_name,0)
                 ori_img = img.copy()
-                img = preprocess(img, im_name)
+                #img = preprocess(img, im_name)
                 _, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
-                key = dir_path+arr[0]
-                x,y,max_d = dict_center[key]
+                im_path = dir_path+im_name
+                if position in ['02', '06', '05', '00', '04']:
+                    new_x,new_y,new_r = find_center(im_path, im_name)
+                    key = dir_path+position
+                    x,y,max_d = dict_center[key]
+                elif position in ['08', '03', '01', '07']:
+                    x,y,r = find_center(im_path, im_name)
+                    max_d = find_max_d_by_center(im_path, im_name, x, y)
+                    key = dir_path+position
+                    new_x,new_y,new_r = dict_center[key]
+                else:
+                    print ('error', im_name)
+                    exit(1)
+
                 angle = find_angle_by_center(img, x, y, max_d, im_name)
                 draw_result_by_center(ori_img, x, y, angle, max_d, im_name)
                 if arr[0] in dict_result:
                     dict_result[arr[0]].append([im_name, angle])
                 else:
                     dict_result[arr[0]] = [[im_name, angle]]
-            if arr[0] == '00':
-                i_total += 1
-                if angle != 110:
-                    print (im_name, "should be 110, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '01':
-                i_total += 1
-                if angle != 110:
-                    print (im_name, "should be 110, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '02':
-                i_total += 1
-                if angle != 130:
-                    print (im_name, "should be 130, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '03':
-                i_total += 1
-                if angle != 140:
-                    print (im_name, "should be 140, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '04':
-                i_total += 1
-                if angle != 110:
-                    print (im_name, "should be 110, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '05':
-                i_total += 1
-                if angle != 110:
-                    print (im_name, "should be 110, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '06':
-                i_total += 1
-                if angle != 110:
-                    print (im_name, "should be 110, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '07':
-                i_total += 1
-                if angle != 65:
-                    print (im_name, "should be 65, but it is ", angle)
-                else:
-                    i_right += 1
-            elif arr[0] == '08':
-                i_total += 1
-                if angle != 80:
-                    print (im_name, "should be 80, but it is ", angle)
-                else:
-                    i_right += 1
-            else:
-                print ("error there is not such imgae considered:", im_name)
+                deal_with_label(arr[0], angle)
+
+                cv2.circle(ori_img,(new_x,new_y),3,(0,0,0),-1)
+                cv2.circle(ori_img,(new_x,new_y),new_r,(0,0,0),1)
+                cv2.imwrite('../result/'+im_name+'.center.bmp', ori_img)
         print (dict_result)
         for key in sorted(dict_result):
             print (dict_result[key])
-        #print ("test result: ", i_right/i_total)
 
 def main():
     dict_center = {}
     dir_path = '../../AMR_data/01/'
+    #dir_path = '../../AMR_data/02/'
     deal_with_bg(dir_path, dict_center)
     print (dict_center)
     deal_with_fg(dir_path, dict_center)
