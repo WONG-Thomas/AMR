@@ -595,9 +595,7 @@ def find_density_angle_by_center(img, y, x, max_d, img_name):
     for i,s in enumerate(statics):
         if i-int(width/2) < 0:
             s[3] = sum (statics[i-int(width/2):,2])
-            print (i, i-width/2, s[3])
             s[3] += sum (statics[:i+int(width/2),2])
-            print (i, i+width/2, s[3])
             s[3] /= width
         elif i+int(width/2) >= len(statics):
             s[3] = sum (statics[i-int(width/2):,2])
@@ -795,12 +793,11 @@ def deal_with_label(name, value):
     else:
         print ("error there is not such imgae considered:", name)
 
-def check_label(name, predict, dic_gt):
+def check_label(name , dic_gt):
     if name not in dic_gt:
         print ("key error in dict label")
         print (name)
-        print (dic_gt)
-        exit(1)
+        return None
     else:
         return dic_gt[name] 
 
@@ -910,30 +907,44 @@ def deal_with_direction(dir_path, label_path):
     big_error = {}
     i_no_center = 0
     dict_radius = {
-                   '00':[-2,0,100,10,1.0,2.0], 
+                   #'00':[-2,0,100,10,1.0,2.0], 
+                   #'01':[-3,0,100,10,1.5,2.5], 
+                   #'02':[3,0,100,10,2.0,2.0], 
+                   #'03':[-5,1,100,10,1.5,2.0], 
+                   #'04':[-6,0,100,10,2.0,2.5],
+                   #'05':[-9,1,70,10,2.5,3.0], 
+                   #'06':[-1,0,100,10,2.0,2.0], 
+                   #'07':[-5,0,100,10,1.5,2.0], 
+                   #'08':[-3,-3,100,10,2.0,2.0]
+                   '00':[-1,1,100,10,1.0,2.5], 
                    '01':[-3,0,100,10,1.5,2.5], 
-                   '02':[3,0,100,10,2.0,2.0], 
-                   '03':[-5,1,100,10,1.5,2.0], 
-                   '04':[-7,0,100,10,2.5,2.5],
-                   '05':[-9,1,70,10,2.5,3.0], 
+                   '02':[4,0,100,10,2.0,2.0], 
+                   '03':[-4,1,100,10,1.5,2.0], 
+                   '04':[-7,2,100,10,2.5,2.5],
+                   '05':[-6,4,70,10,2.5,3.4], 
                    '06':[-1,0,100,10,2.0,2.0], 
-                   '07':[-5,0,100,10,1.5,2.0], 
+                   '07':[-7,0,100,10,1.5,2.0], 
                    '08':[-3,-3,100,10,2.0,2.0]
                     }
     dict_result = {}
     for im_name in os.listdir(dir_path):
-        #if im_name !=  '01_00912_Video_2021_08_25_103524_3.avi.jpg':
+        #if im_name !=  '07_00576_Video_2021_08_03_103726_2.avi.jpg':
             #continue
         if im_name.endswith('.jpg'):
             arr = im_name.split('_')
             template_id = arr[0]
-            if template_id != '01':
-                continue
+            #if template_id != '08':
+                #continue
             if arr[1] == '00000':
                 continue
             else:
                 print(im_name)
-                im_out_path = '../../AMR_data/0902_processed/';
+                gt = check_label(im_name, dict_label)
+                print ('gt', gt)
+                if gt == None:
+                    continue
+                gt = eval(gt)
+                im_out_path = '../../AMR_data/0908_processed/';
                 ratio = dict_radius[template_id][4]
                 preprocess_for_center(dir_path, im_out_path, ratio, im_name)
                 if template_id in ['02', '06', '05', '00', '04']:
@@ -970,8 +981,6 @@ def deal_with_direction(dir_path, label_path):
                     angle = -1
                 else:
                     angle = find_density_angle_by_center(img, x, y, max_d, im_name)
-                gt = check_label(im_name, angle, dict_label)
-                gt = eval(gt)
                 draw_result_by_center(ori_img, x, y, angle, gt, max_d, im_name)
                 if arr[0] in dict_result:
                     dict_result[arr[0]].append([im_name, angle, gt])
@@ -1013,8 +1022,8 @@ def deal_with_direction(dir_path, label_path):
 
     for key in sorted(dict_result):
         print (dict_result[key])
-    print ("delta 5 precision is:", i_tp5/i_total, "details: ", i_tp5, " ", i_total)
-    print ("delta 10 precision is:", i_tp10/i_total, "details: ", i_tp10, " ", i_total)
+    print ("delta 5 precision is:", i_tp5/(i_total+0.000001), "details: ", i_tp5, " ", i_total)
+    print ("delta 10 precision is:", i_tp10/(i_total+0.000001), "details: ", i_tp10, " ", i_total)
     print ("max error is:", max_delta, max_name)
     print ("min error is:", min_delta, min_name)
     print ("average over error is: ", over_deltas/(i_over+0.000001), " ", over_deltas, " ", i_over)
@@ -1038,10 +1047,10 @@ def preprocess_folder(src_folder_name, dst_folder_name):
 
 def main():
     dict_center = {}
-    dir_path = '../../AMR_data/0902/'
+    dir_path = '../../AMR_data/0908/'
     #dir_path = '../../AMR_data/0902_processed/'
     label_path = '../../AMR_data/0902.txt'
-    #preprocess_folder(dir_path, '../../AMR_data/0902_processed/')
+    #preprocess_folder(dir_path, '../../AMR_data/0908_processed/')
     deal_with_direction(dir_path, label_path)
 
 if __name__ == '__main__':
