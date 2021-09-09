@@ -1,0 +1,528 @@
+%YAML:1.0
+---
+infos:
+   -
+      angle: 0.
+      scale: 1.
+   -
+      angle: 1.
+      scale: 1.
+   -
+      angle: 2.
+      scale: 1.
+   -
+      angle: 3.
+      scale: 1.
+   -
+      angle: 4.
+      scale: 1.
+   -
+      angle: 5.
+      scale: 1.
+   -
+      angle: 6.
+      scale: 1.
+   -
+      angle: 7.
+      scale: 1.
+   -
+      angle: 8.
+      scale: 1.
+   -
+      angle: 9.
+      scale: 1.
+   -
+      angle: 10.
+      scale: 1.
+   -
+      angle: 11.
+      scale: 1.
+   -
+      angle: 12.
+      scale: 1.
+   -
+      angle: 13.
+      scale: 1.
+   -
+      angle: 14.
+      scale: 1.
+   -
+      angle: 15.
+      scale: 1.
+   -
+      angle: 16.
+      scale: 1.
+   -
+      angle: 17.
+      scale: 1.
+   -
+      angle: 18.
+      scale: 1.
+   -
+      angle: 19.
+      scale: 1.
+   -
+      angle: 20.
+      scale: 1.
+   -
+      angle: 21.
+      scale: 1.
+   -
+      angle: 22.
+      scale: 1.
+   -
+      angle: 23.
+      scale: 1.
+   -
+      angle: 24.
+      scale: 1.
+   -
+      angle: 29.
+      scale: 1.
+   -
+      angle: 30.
+      scale: 1.
+   -
+      angle: 31.
+      scale: 1.
+   -
+      angle: 68.
+      scale: 1.
+   -
+      angle: 74.
+      scale: 1.
+   -
+      angle: 78.
+      scale: 1.
+   -
+      angle: 84.
+      scale: 1.
+   -
+      angle: 85.
+      scale: 1.
+   -
+      angle: 86.
+      scale: 1.
+   -
+      angle: 87.
+      scale: 1.
+   -
+      angle: 88.
+      scale: 1.
+   -
+      angle: 89.
+      scale: 1.
+   -
+      angle: 90.
+      scale: 1.
+   -
+      angle: 91.
+      scale: 1.
+   -
+      angle: 92.
+      scale: 1.
+   -
+      angle: 93.
+      scale: 1.
+   -
+      angle: 94.
+      scale: 1.
+   -
+      angle: 95.
+      scale: 1.
+   -
+      angle: 96.
+      scale: 1.
+   -
+      angle: 98.
+      scale: 1.
+   -
+      angle: 99.
+      scale: 1.
+   -
+      angle: 100.
+      scale: 1.
+   -
+      angle: 101.
+      scale: 1.
+   -
+      angle: 102.
+      scale: 1.
+   -
+      angle: 103.
+      scale: 1.
+   -
+      angle: 104.
+      scale: 1.
+   -
+      angle: 105.
+      scale: 1.
+   -
+      angle: 106.
+      scale: 1.
+   -
+      angle: 107.
+      scale: 1.
+   -
+      angle: 108.
+      scale: 1.
+   -
+      angle: 109.
+      scale: 1.
+   -
+      angle: 110.
+      scale: 1.
+   -
+      angle: 111.
+      scale: 1.
+   -
+      angle: 112.
+      scale: 1.
+   -
+      angle: 113.
+      scale: 1.
+   -
+      angle: 114.
+      scale: 1.
+   -
+      angle: 115.
+      scale: 1.
+   -
+      angle: 117.
+      scale: 1.
+   -
+      angle: 118.
+      scale: 1.
+   -
+      angle: 119.
+      scale: 1.
+   -
+      angle: 123.
+      scale: 1.
+   -
+      angle: 153.
+      scale: 1.
+   -
+      angle: 154.
+      scale: 1.
+   -
+      angle: 158.
+      scale: 1.
+   -
+      angle: 159.
+      scale: 1.
+   -
+      angle: 160.
+      scale: 1.
+   -
+      angle: 161.
+      scale: 1.
+   -
+      angle: 163.
+      scale: 1.
+   -
+      angle: 164.
+      scale: 1.
+   -
+      angle: 165.
+      scale: 1.
+   -
+      angle: 166.
+      scale: 1.
+   -
+      angle: 167.
+      scale: 1.
+   -
+      angle: 168.
+      scale: 1.
+   -
+      angle: 169.
+      scale: 1.
+   -
+      angle: 170.
+      scale: 1.
+   -
+      angle: 174.
+      scale: 1.
+   -
+      angle: 175.
+      scale: 1.
+   -
+      angle: 176.
+      scale: 1.
+   -
+      angle: 177.
+      scale: 1.
+   -
+      angle: 178.
+      scale: 1.
+   -
+      angle: 179.
+      scale: 1.
+   -
+      angle: 180.
+      scale: 1.
+   -
+      angle: 181.
+      scale: 1.
+   -
+      angle: 182.
+      scale: 1.
+   -
+      angle: 183.
+      scale: 1.
+   -
+      angle: 184.
+      scale: 1.
+   -
+      angle: 185.
+      scale: 1.
+   -
+      angle: 186.
+      scale: 1.
+   -
+      angle: 187.
+      scale: 1.
+   -
+      angle: 188.
+      scale: 1.
+   -
+      angle: 189.
+      scale: 1.
+   -
+      angle: 190.
+      scale: 1.
+   -
+      angle: 191.
+      scale: 1.
+   -
+      angle: 192.
+      scale: 1.
+   -
+      angle: 193.
+      scale: 1.
+   -
+      angle: 194.
+      scale: 1.
+   -
+      angle: 195.
+      scale: 1.
+   -
+      angle: 196.
+      scale: 1.
+   -
+      angle: 197.
+      scale: 1.
+   -
+      angle: 198.
+      scale: 1.
+   -
+      angle: 199.
+      scale: 1.
+   -
+      angle: 200.
+      scale: 1.
+   -
+      angle: 201.
+      scale: 1.
+   -
+      angle: 202.
+      scale: 1.
+   -
+      angle: 203.
+      scale: 1.
+   -
+      angle: 204.
+      scale: 1.
+   -
+      angle: 205.
+      scale: 1.
+   -
+      angle: 206.
+      scale: 1.
+   -
+      angle: 207.
+      scale: 1.
+   -
+      angle: 208.
+      scale: 1.
+   -
+      angle: 209.
+      scale: 1.
+   -
+      angle: 210.
+      scale: 1.
+   -
+      angle: 211.
+      scale: 1.
+   -
+      angle: 212.
+      scale: 1.
+   -
+      angle: 213.
+      scale: 1.
+   -
+      angle: 214.
+      scale: 1.
+   -
+      angle: 215.
+      scale: 1.
+   -
+      angle: 216.
+      scale: 1.
+   -
+      angle: 218.
+      scale: 1.
+   -
+      angle: 219.
+      scale: 1.
+   -
+      angle: 248.
+      scale: 1.
+   -
+      angle: 254.
+      scale: 1.
+   -
+      angle: 256.
+      scale: 1.
+   -
+      angle: 263.
+      scale: 1.
+   -
+      angle: 264.
+      scale: 1.
+   -
+      angle: 265.
+      scale: 1.
+   -
+      angle: 266.
+      scale: 1.
+   -
+      angle: 267.
+      scale: 1.
+   -
+      angle: 268.
+      scale: 1.
+   -
+      angle: 269.
+      scale: 1.
+   -
+      angle: 270.
+      scale: 1.
+   -
+      angle: 271.
+      scale: 1.
+   -
+      angle: 272.
+      scale: 1.
+   -
+      angle: 273.
+      scale: 1.
+   -
+      angle: 274.
+      scale: 1.
+   -
+      angle: 275.
+      scale: 1.
+   -
+      angle: 276.
+      scale: 1.
+   -
+      angle: 278.
+      scale: 1.
+   -
+      angle: 279.
+      scale: 1.
+   -
+      angle: 280.
+      scale: 1.
+   -
+      angle: 281.
+      scale: 1.
+   -
+      angle: 282.
+      scale: 1.
+   -
+      angle: 283.
+      scale: 1.
+   -
+      angle: 284.
+      scale: 1.
+   -
+      angle: 285.
+      scale: 1.
+   -
+      angle: 286.
+      scale: 1.
+   -
+      angle: 287.
+      scale: 1.
+   -
+      angle: 288.
+      scale: 1.
+   -
+      angle: 289.
+      scale: 1.
+   -
+      angle: 290.
+      scale: 1.
+   -
+      angle: 291.
+      scale: 1.
+   -
+      angle: 340.
+      scale: 1.
+   -
+      angle: 341.
+      scale: 1.
+   -
+      angle: 344.
+      scale: 1.
+   -
+      angle: 345.
+      scale: 1.
+   -
+      angle: 346.
+      scale: 1.
+   -
+      angle: 347.
+      scale: 1.
+   -
+      angle: 348.
+      scale: 1.
+   -
+      angle: 349.
+      scale: 1.
+   -
+      angle: 350.
+      scale: 1.
+   -
+      angle: 351.
+      scale: 1.
+   -
+      angle: 352.
+      scale: 1.
+   -
+      angle: 353.
+      scale: 1.
+   -
+      angle: 354.
+      scale: 1.
+   -
+      angle: 355.
+      scale: 1.
+   -
+      angle: 356.
+      scale: 1.
+   -
+      angle: 357.
+      scale: 1.
+   -
+      angle: 358.
+      scale: 1.
+   -
+      angle: 359.
+      scale: 1.
+   -
+      angle: 360.
+      scale: 1.

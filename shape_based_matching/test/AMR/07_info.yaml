@@ -1,0 +1,45 @@
+%YAML:1.0
+---
+infos:
+   -
+      angle: 0.
+      scale: 1.
+   -
+      angle: 87.
+      scale: 1.
+   -
+      angle: 89.
+      scale: 1.
+   -
+      angle: 90.
+      scale: 1.
+   -
+      angle: 161.
+      scale: 1.
+   -
+      angle: 162.
+      scale: 1.
+   -
+      angle: 172.
+      scale: 1.
+   -
+      angle: 173.
+      scale: 1.
+   -
+      angle: 179.
+      scale: 1.
+   -
+      angle: 181.
+      scale: 1.
+   -
+      angle: 187.
+      scale: 1.
+   -
+      angle: 188.
+      scale: 1.
+   -
+      angle: 359.
+      scale: 1.
+   -
+      angle: 360.
+      scale: 1.
